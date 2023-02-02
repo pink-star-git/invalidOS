@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "name": "ZOS",
+            "includePath": [
+                "${workspaceFolder}/include"
+            ],
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/gcc"
+        }
+    ],
+    "version": 4
+}
