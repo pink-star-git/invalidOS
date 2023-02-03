@@ -76,18 +76,18 @@ void main()
     test.p_start_sector = 9;
 
 
-    u_short16 err;
-    asm volatile(
-        "mov $0x42, %%ah\n\t"
-        "push %%cs\n\t"
-        "pop %%ds\n\t"
-        "int $0x13\n\t"
-        ""
-        : "=a"(err)
-        : "d"(rom.get_boot_disk_id()),"S"(&test)//,"c"(addr.p_address_high)
-        :
-    );
-    print_char((err >> 8)+0x30, c_white, 8, 8, info.width);
+//     u_short16 err;
+//     asm volatile(
+//         "mov $0x42, %%ah\n\t"
+//         "push %%cs\n\t"
+//         "pop %%ds\n\t"
+//         "int $0x13\n\t"
+//         ""
+//         : "=a"(err)
+//         : "d"(rom.get_boot_disk_id()),"S"(&test)//,"c"(addr.p_address_high)
+//         :
+//     );
+//     print_char((err >> 8)+0x30, c_white, 8, 8, info.width);
 
 
     rom.load_data_use_daps(&test);
