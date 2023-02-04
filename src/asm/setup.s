@@ -26,12 +26,26 @@ mov si,paket_sysint
 mov ah,42h
 int 13h
 
+mov ax,4F02h
+mov bx,11bh
+int 10h
+
 aboba:
+xor ax,ax
 mov ah,14h
 int 90h
+cmp al,3Dh
+je obabo
+
+; mov ah,1
+; push 0b800h
+; pop es
+; stosw
+; add al,128
 mov ah,13h
 int 90h
 jmp aboba
+obabo:
 
 push cs
 pop ds
@@ -45,6 +59,7 @@ jmp $
 times(512-($-0500h)) db 0
 
 ;data
+
 paket_kernel:
     dw 16;const paksize
     dw 8;num sectors

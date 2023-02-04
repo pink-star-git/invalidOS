@@ -1,5 +1,12 @@
-MAIN_INTERRUPT_HANDLER:
+; setup
+; by zebra
 
+use16
+org 0700h
+
+; code
+
+MAIN_INTERRUPT_HANDLER:
 
 cmp ah,0;al=видеорежим
 je HF_SET_VIDEO
@@ -275,3 +282,5 @@ HGET_SIZE_RUN_PROGRAMM:
     ; mov di,SIZE_RUN_PROGRAMM
     ; mov bl,[di]
 iret
+
+times(1024-($-0700h)) db 0
