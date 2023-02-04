@@ -182,13 +182,13 @@ HF_GET_KEY:
 iret
 
 HF_LOAD_DAPS:
-	mov dl,[BOOT_DISK]
+	mov dl,[7C80h]
 	mov ah,42h
 	int 13h
 iret
 
 HF_SAVE_DAPS:
-	mov dl,[BOOT_DISK]
+	mov dl,[7C80h]
 	mov ah,43h
 	int 13h
 iret

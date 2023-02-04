@@ -49,6 +49,7 @@ printf "\33[1;36m[  INFO  ]\33[0m post compilation\n"
 # post compilation
 ../builder/script/fasmc.sh boot asm
 ../builder/script/fasmc.sh setup asm
+../builder/script/fasmc.sh system_interrupt asm
 ../builder/script/fasmc.sh main ../build/s/kernel
 ../builder/script/fasmc.sh shell ../build/s/kernel
 ../builder/script/fasmc.sh os ../build/s/os ..
