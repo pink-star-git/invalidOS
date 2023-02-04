@@ -54,7 +54,6 @@ void status(bool status, s_video_mode_info info, u_char8 line)
 void main()
 {
     // ###### init ######
-    //aboba
     Rom rom = Rom();
     set_video_mode(0x12);
     s_video_mode_info info = get_video_mode_info();
