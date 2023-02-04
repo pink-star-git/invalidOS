@@ -1,6 +1,10 @@
+; boot
+; by zebra
 
 use16
 org 7C00h
+
+;code
 cli             ;запрещаем прерывания
         xor ax,ax       ;обнуляем регистр ах
         mov ds,ax       ;настраиваем сегмент данных на нулевой адрес
@@ -24,19 +28,20 @@ pop ds
 mov si,paket
 mov ah,42h
 int 13h
-jmp 0000:8000h
+jmp 0000:0500h
 
 jmp $
+
 paket:
 dw 16;const paksize
-dw 8;num sectors
-dw 8000h;offset
+dw 2;num sectors
+dw 0500h;offset
 dw 0;segment
 dq 1;start sector
 
 times(128-($-07C00h)) db 0
 
-disk_id: db 33h,34h
+disk_id: db 0h,0h
 
 times(512-2-($-07C00h)) db 0
 db 055h,0AAh

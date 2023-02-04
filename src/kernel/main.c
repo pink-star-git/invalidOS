@@ -55,7 +55,7 @@ void main()
 {
     // ###### init ######
     Rom rom = Rom();
-    set_video_mode(0x12);
+    set_video_mode(0x3);
     s_video_mode_info info = get_video_mode_info();
     status(info.mode == 0x3, info, 1);
     status(rom.get_boot_disk_id() == 0x80, info, 2);

@@ -32,7 +32,7 @@ je HF_NEW_LINE
 cmp ah,08
 je HF_GET_LEN_STR
 
-;in = ds:di - str1 ds:si - str2
+; |-in - ds:di - str1 ds:si - str2
 ; |-out - al=|=0{1 srting == 2 string}
 ;            |=1{1 srting != 2 string}
 cmp ah,09h
