@@ -56,4 +56,9 @@ mv -f os.bin ../os.img
 
 printf "\33[1;37m[ * * *  ]\33[0m start OS\n"
 # start os
-qemu-system-x86_64 -enable-kvm -drive file=../os.img,index=0,format=raw
+if [ $1 =='-k' ]
+then
+    qemu-system-x86_64 -enable-kvm -drive file=../os.img,index=0,format=raw
+else
+    qemu-system-x86_64 -drive file=../os.img,index=0,format=raw
+fi
