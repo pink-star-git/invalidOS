@@ -36,16 +36,59 @@ mov ah,14h
 int 90h
 cmp al,3Dh
 je obabo
-
-; mov ah,1
-; push 0b800h
-; pop es
-; stosw
-; add al,128
 mov ah,13h
 int 90h
 jmp aboba
 obabo:
+
+in al, 92h
+or al, 2
+out 92h, al
+
+cli
+in al, 70h
+or al, 80h
+out 70h, al
+
+lgdt [gdtr]
+
+mov eax, cr0
+or al, 1
+mov cr0, eax
+
+jmp far dword 0000000000001000b:pm_entry
+
+use32               ; generate 32-bit code
+; Protected mode entry point
+pm_entry:
+    mov ax, 0000000000010000b
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+
+    mov edi, 0xB8000            
+    mov esi, message            
+    cld                         
+
+.loop:                          
+    lodsb                       
+    test al, al                 
+    jz .exit                    
+    stosb                       
+    mov al, 7                   
+    stosb                       
+    jmp .loop
+
+.exit:
+    jmp $
+    cli                         
+    hlt                         
+
+message db 'Hello World!', 0
+
+align 8
 
 push cs
 pop ds
@@ -59,6 +102,29 @@ jmp $
 times(512-($-0500h)) db 0
 
 ;data
+
+gdt:
+NULL_SEG_DESCRIPTOR db 8 dup(0)
+
+CODE_SEG_DESCRIPTOR:
+    dw 0xFFFF          
+    db 0x00, 0x00, 0x00
+    db 10011010b       
+    db 11001111b       
+    db 0x00            
+
+DATA_SEG_DESCRIPTOR:
+    dw 0xFFFF          
+    db 0x00, 0x00, 0x00
+    db 10010010b       
+    db 11001111b       
+    db 0x00            
+
+gdt_size equ $ - gdt
+
+gdtr:
+    dw gdt_size - 1
+    dd gdt 
 
 paket_kernel:
     dw 16;const paksize
