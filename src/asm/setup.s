@@ -1,10 +1,14 @@
 ; setup
 ; by zebra
-
 use16
 org 0500h
+jmp start
+
+    include 'lib/ata.s'
 
 .code:
+start:
+use16
 
 xor ax,ax
 push ax
@@ -25,25 +29,6 @@ pop ds
 mov si,paket_sysint
 mov ah,42h
 int 13h
-
-; mov ax,4F02h
-; mov bx,11bh
-; int 10h
-
-aboba:
-    xor ax,ax
-    int 16h
-cmp al,3Dh
-je obabo
-	push ax
-	mov ah,0fh
-    int 10h
-	pop ax
-	mov ah,0ah
-	mov cx,1
-	int 10h
-jmp aboba
-obabo:
 
 ; Open gate A20
 in al, 92h
@@ -78,24 +63,32 @@ pm_entry:
     mov gs, ax
     mov ss, ax
 
-    mov edi, 0xB8000            
-    mov esi, message            
-    cld                         
+    mov eax, 0x3
+    mov ecx, 0x8
+    mov edi, 0x0900
+    call ata_lba_read
+    call 0x0900
 
-.loop:                          
-    lodsb                       
-    test al, al                 
-    jz .exit                    
-    stosb                       
-    mov al, 7                   
-    stosb                       
-    jmp .loop
+    mov edi, 0xB8000
+    mov esi, message
 
-.exit:
-    cli                         
-    hlt                         
+    cld
+    .loop:
+        lodsb
+        test al, al
+        jz .exit
+        stosb
+        mov al, 7
+        stosb
+        jmp .loop
+    cli
 
-message db 'Hello World!', 0
+    cld
+    .exit:
+        jmp $
+        hlt
+
+message db 'Error, host is down!', 0
 
 align 8
 

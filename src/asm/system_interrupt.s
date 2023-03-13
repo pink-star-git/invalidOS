@@ -1,7 +1,7 @@
 ; setup
-; by zebra
+; by aov
 
-use16
+use32
 org 0700h
 
 ; code
@@ -294,7 +294,7 @@ iret
 ; @return None
 ;=============================================================================
 ata_lba_read:
-               pushfq
+               pushfd
                and eax, 0x0FFFFFFF
                push eax
                push ebx
@@ -349,7 +349,7 @@ ata_lba_read:
                pop ecx
                pop ebx
                pop eax
-               popfq
+               popfd
                ret
 
 times(1024-($-0700h)) db 0

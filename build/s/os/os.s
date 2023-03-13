@@ -1,5 +1,6 @@
 boot: file 'bin/boot.bin'
 setup: file 'bin/setup.bin'
-system_interrupt: file 'bin/system_interrupt.bin'
+; aboba: file 'bin/test.bin'
+; system_interrupt: file 'bin/system_interrupt.bin'
 kernel: file 'bin/main.bin'
-shell: file 'bin/shell.bin'
+; shell: file 'bin/shell.bin'
