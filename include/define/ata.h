@@ -1,3 +1,5 @@
+#ifndef ATA
+
 #define ATA_SR_BSY     0x80    // Busy
 #define ATA_SR_DRDY    0x40    // Drive ready
 #define ATA_SR_DF      0x20    // Drive write fault
@@ -69,8 +71,12 @@
 #define ATA_REG_ALTSTATUS  0x0C
 #define ATA_REG_DEVADDRESS 0x0D
 
-#define      ATA_PRIMARY      0x00
-#define      ATA_SECONDARY    0x01
+#define ATA_PRIMARY      0x00
+#define ATA_SECONDARY    0x01
 
-#define      ATA_READ      0x00
-#define      ATA_WRITE     0x01
+#define ATA_READ      0x00
+#define ATA_WRITE     0x01
+
+#endif
+
+#define ATA

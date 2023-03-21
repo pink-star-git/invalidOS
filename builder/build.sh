@@ -29,20 +29,18 @@ cd ../build
 
 printf "\33[1;36m[  INFO  ]\33[0m pre compilation\n"
 # pre compilation
-mkdir bin 2> /dev/null
-mkdir o 2> /dev/null
-mkdir log 2> /dev/null
+mkdir bin -p
+mkdir o -p
+mkdir log -p
 touch log/fasm.log 2> /dev/null
-touch log/fasme.log 2> /dev/null
 touch log/c.log 2> /dev/null
-touch log/ce.log 2> /dev/null
 printf "\33[1;32m[  DONE  ]\33[0m pre compilation done\n\n"
 
 printf "\33[1;36m[  INFO  ]\33[0m c compilation\n"
 # C compilation
 # ../builder/script/ccs.sh main kernel
 ../builder/script/cc.sh main kernel
-../builder/script/cc.sh shell kernel
+#../builder/script/cc.sh shell kernel
 printf "\33[1;32m[  DONE  ]\33[0m c compilation done\n\n"
 
 printf "\33[1;36m[  INFO  ]\33[0m post compilation\n"
@@ -52,7 +50,7 @@ printf "\33[1;36m[  INFO  ]\33[0m post compilation\n"
 ../builder/script/fasmc.sh test asm
 ../builder/script/fasmc.sh system_interrupt asm
 ../builder/script/fasmc.sh main ../build/s/kernel
-../builder/script/fasmc.sh shell ../build/s/kernel
+#../builder/script/fasmc.sh shell ../build/s/kernel
 ../builder/script/fasmc.sh os ../build/s/os ..
 printf "\33[1;32m[  DONE  ]\33[0m post compilation done\n\n"
 

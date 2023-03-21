@@ -1,6 +1,7 @@
 #include "ata.h"
 
-#ifndef ATA
+#ifndef IDE
+
 struct IDEChannelRegisters
 {
    unsigned short base;  // I/O Base.
@@ -21,5 +22,7 @@ struct ide_device
    unsigned int   Size;        // Size in Sectors.
    unsigned char  Model[41];   // Model in string.
 };
+
 #endif
-#define ATA
+
+#define IDE

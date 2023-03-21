@@ -1,36 +1,22 @@
-#define e_Color 1 
-typedef enum {
-    Black,
-    Blue,
-    Green,
-    Turquoise,
-    Red,
-    Purple,
-    Brown,
-    Light_gray,
-    Gray,
-    Light_blue,
-    Light_green,
-    Light_turquoise,
-    Pink,
-    Light_purple,
-    Yellow,
-    White,
-} e_color;
+#ifndef COLOR
 
-e_color c_black = Black;
-e_color c_blue = Blue;
-e_color c_green = Green;
-e_color c_turquoise = Turquoise;
-e_color c_red = Red;
-e_color c_purple = Purple;
-e_color c_brown = Brown;
-e_color c_light_gray = Light_gray;
-e_color c_gray = Gray;
-e_color c_light_blue = Light_blue;
-e_color c_light_green = Light_green;
-e_color c_light_turquoise = Light_turquoise;
-e_color c_pink = Pink;
-e_color c_light_purple = Light_purple;
-e_color c_yellow = Yellow;
-e_color c_white = White;
+#define Black 0
+#define Blue 1
+#define Green 2
+#define Turquoise 3
+#define Red 4
+#define Purple 5
+#define Brown 6
+#define Light_gray 7
+#define Gray 8
+#define Light_blue 9
+#define Light_green 10
+#define Light_turquoise 11
+#define Pink 12
+#define Light_purple 13
+#define Yellow 14
+#define White 15
+
+#endif
+
+#define COLOR

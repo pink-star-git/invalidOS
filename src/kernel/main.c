@@ -1,12 +1,11 @@
 #include "define/integer.h"
 // #include "define/s_rom.h"
-// #include "lib/rom/rom.h"
+#include "lib/rom/ide.h"
 // #include "define/color.h"
 // #include "lib/graphics/graphics.h"
 // #include "lib/str.h"
 
-asm(//".code16gcc\n\t"
-    "call main\n\t");
+asm("call main\n\t");
 
 u_char8 print_char(u_char8 symbol, u_char8 color, u_char8 x, u_char8 y, u_short16 width)
 {
