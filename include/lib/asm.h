@@ -98,3 +98,14 @@ insl (u_short16 reg, u_int32 *buffer, u_int32 quads)
         buffer[index] = inl(reg);
     }
 }
+
+void
+sleep (u_int32 millis) {
+    if (!millis) return;
+    while (millis > 0) {
+        asm volatile (
+                    "hlt"
+                );
+        millis--;
+    }
+}

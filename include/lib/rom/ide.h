@@ -9,7 +9,7 @@ volatile unsigned static char ide_irq_invoked = 0;
 unsigned static char atapi_packet[12] = {0xA8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 void
-ide_write(unsigned char channel, unsigned char reg, unsigned char data)
+ide_write (unsigned char channel, unsigned char reg, unsigned char data)
 {
     if (reg > 0x07 && reg < 0x0C)
         ide_write(channel, ATA_REG_CONTROL, 0x80 | channels[channel].nIEN);
@@ -28,7 +28,7 @@ ide_write(unsigned char channel, unsigned char reg, unsigned char data)
 }
 
 unsigned char
-ide_read(unsigned char channel, unsigned char reg)
+ide_read (unsigned char channel, unsigned char reg)
 {
     unsigned char result;
     if (reg > 0x07 && reg < 0x0C)
@@ -50,7 +50,7 @@ ide_read(unsigned char channel, unsigned char reg)
 }
 
 void
-ide_read_buffer(unsigned char channel, unsigned char reg,
+ide_read_buffer (unsigned char channel, unsigned char reg,
                 unsigned int *buffer, unsigned int quads)
 {
     if (reg > 0x07 && reg < 0x0C)
@@ -76,7 +76,7 @@ ide_read_buffer(unsigned char channel, unsigned char reg,
 }
 
 unsigned char
-ide_polling(unsigned char channel, unsigned int advanced_check)
+ide_polling (unsigned char channel, unsigned int advanced_check)
 {
     for(int i = 0; i < 4; i++)
         ide_read(channel, ATA_REG_ALTSTATUS);
@@ -100,7 +100,8 @@ ide_polling(unsigned char channel, unsigned int advanced_check)
     return 0; // No Error.
 }
 
-unsigned char ide_print_error(unsigned int drive, unsigned char err) {
+unsigned char
+ide_print_error (unsigned int drive, unsigned char err) {
     if (err == 0)
         return err;
  
@@ -127,10 +128,10 @@ unsigned char ide_print_error(unsigned int drive, unsigned char err) {
 }
 
 void
-ide_initialize(unsigned int BAR0, unsigned int BAR1, unsigned int BAR2,
+ide_initialize (unsigned int BAR0, unsigned int BAR1, unsigned int BAR2,
                 unsigned int BAR3, unsigned int BAR4)
 {
-    int j, k, count = 0;
+    int i, j, k, count = 0;
 
     // 1- Detect I/O Ports which interface IDE Controller:
     channels[ATA_PRIMARY  ].base  = (BAR0 & 0xFFFFFFFC) + 0x1F0 * (!BAR0);
@@ -144,9 +145,9 @@ ide_initialize(unsigned int BAR0, unsigned int BAR1, unsigned int BAR2,
     ide_write(ATA_PRIMARY  , ATA_REG_CONTROL, 2);
     ide_write(ATA_SECONDARY, ATA_REG_CONTROL, 2);
 
-       // 3- Detect ATA-ATAPI Devices:
-   for (i = 0; i < 2; i++)
-      for (j = 0; j < 2; j++) {
+    // 3- Detect ATA-ATAPI Devices:
+    for (i = 0; i < 2; i++)
+        for (j = 0; j < 2; j++) {
  
          unsigned char err = 0, type = IDE_ATA, status;
          ide_devices[count].Reserved = 0; // Assuming that no drive here.
@@ -187,7 +188,7 @@ ide_initialize(unsigned int BAR0, unsigned int BAR1, unsigned int BAR2,
          }
  
          // (V) Read Identification Space of the Device:
-         ide_read_buffer(i, ATA_REG_DATA, (unsigned int) ide_buf, 128);
+         ide_read_buffer(i, ATA_REG_DATA, (unsigned int *)ide_buf, 128);
  
          // (VI) Read Device Parameters:
          ide_devices[count].Reserved     = 1;

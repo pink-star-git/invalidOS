@@ -1,25 +1,14 @@
 #include "define/integer.h"
 // #include "define/s_rom.h"
 #include "lib/rom/ide.h"
-// #include "define/color.h"
-// #include "lib/graphics/graphics.h"
+#include "define/color.h"
+#include "lib/graphics/text/text.h"
 // #include "lib/str.h"
 
-asm("call main\n\t");
+// asm("ret\n\t");
+asm volatile("jmp main\n\t");
 
-u_char8 print_char(u_char8 symbol, u_char8 color, u_char8 x, u_char8 y, u_short16 width)
-{
-    // asm volatile("pusha");
-    asm volatile(
-        "mov %%cl, %%ah\n\t"
-        "stosw\n\t"
-        : "=a"(symbol)
-        : "a"(symbol), "c"(color),"D"(0xB8000 + (y * width + x) * 2)
-        :
-    );
-    // asm volatile("popa");
-    return symbol;
-}
+
 
 // void print_logo(s_video_mode_info info, u_char8 line)
 // {
@@ -52,6 +41,7 @@ u_char8 print_char(u_char8 symbol, u_char8 color, u_char8 x, u_char8 y, u_short1
 
 void main()
 {
+    // return;
     print_char(0x35, 0x2, 8, 8, 80);
 }
     // ###### init ######
