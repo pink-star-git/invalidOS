@@ -2,3 +2,5 @@
 *.o
 *.log
 *.img
+build
+test
