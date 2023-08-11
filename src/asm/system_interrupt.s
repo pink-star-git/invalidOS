@@ -1,5 +1,6 @@
-; setup
-; by aov
+; src/asm/boot.s
+; Copyright (C) 2022  AOV
+; Updated by  Alex Zebra  using  OSDev.org
 
 use32
 org 0700h

@@ -1,21 +1,24 @@
+// include/define/color.h
+// Copyright (C) 2023  Alex Zebra
+
 #ifndef COLOR
 
-#define Black 0
-#define Blue 1
-#define Green 2
-#define Turquoise 3
-#define Red 4
-#define Purple 5
-#define Brown 6
-#define Light_gray 7
-#define Gray 8
-#define Light_blue 9
-#define Light_green 10
-#define Light_turquoise 11
-#define Pink 12
-#define Light_purple 13
-#define Yellow 14
-#define White 15
+#define C_Black 0
+#define C_Blue 1
+#define C_Green 2
+#define C_Turquoise 3
+#define C_Red 4
+#define C_Purple 5
+#define C_Brown 6
+#define C_Light_gray 7
+#define C_Gray 8
+#define C_Light_blue 9
+#define C_Light_green 10
+#define C_Light_turquoise 11
+#define C_Pink 12
+#define C_Light_purple 13
+#define C_Yellow 14
+#define C_White 15
 
 #endif
 

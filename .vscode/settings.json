@@ -2,5 +2,6 @@
     "files.associations": {
         "*.h": "cpp",
         "*.c": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

@@ -1,3 +1,7 @@
+// include/define/ata.h
+// Copyright (C) 2023  OSDev.org
+
+#include "integer.h"
 #ifndef ATA
 
 #define ATA_SR_BSY     0x80    // Busy
@@ -18,22 +22,21 @@
 #define ATA_ER_TK0NF    0x02    // Track 0 not found
 #define ATA_ER_AMNF     0x01    // No address mark
 
-#define ATA_CMD_READ_PIO          0x20
-#define ATA_CMD_READ_PIO_EXT      0x24
-#define ATA_CMD_READ_DMA          0xC8
-#define ATA_CMD_READ_DMA_EXT      0x25
-#define ATA_CMD_WRITE_PIO         0x30
-#define ATA_CMD_WRITE_PIO_EXT     0x34
-#define ATA_CMD_WRITE_DMA         0xCA
-#define ATA_CMD_WRITE_DMA_EXT     0x35
-#define ATA_CMD_CACHE_FLUSH       0xE7
-#define ATA_CMD_CACHE_FLUSH_EXT   0xEA
-#define ATA_CMD_PACKET            0xA0
-#define ATA_CMD_IDENTIFY_PACKET   0xA1
-#define ATA_CMD_IDENTIFY          0xEC
-
-#define      ATAPI_CMD_READ       0xA8
-#define      ATAPI_CMD_EJECT      0x1B
+#define ATA_CMD_READ_PIO          (s_char8)0x20
+#define ATA_CMD_READ_PIO_EXT      (s_char8)0x24
+#define ATA_CMD_READ_DMA          (s_char8)0xC8
+#define ATA_CMD_READ_DMA_EXT      (s_char8)0x25
+#define ATA_CMD_WRITE_PIO         (s_char8)0x30
+#define ATA_CMD_WRITE_PIO_EXT     (s_char8)0x34
+#define ATA_CMD_WRITE_DMA         (s_char8)0xCA
+#define ATA_CMD_WRITE_DMA_EXT     (s_char8)0x35
+#define ATA_CMD_CACHE_FLUSH       (s_char8)0xE7
+#define ATA_CMD_CACHE_FLUSH_EXT   (s_char8)0xEA
+#define ATA_CMD_PACKET            (s_char8)0xA0
+#define ATA_CMD_IDENTIFY_PACKET   (s_char8)0xA1
+#define ATA_CMD_IDENTIFY          (s_char8)0xEC
+#define      ATAPI_CMD_READ       (s_char8)0xA8
+#define      ATAPI_CMD_EJECT      (s_char8)0x1B
 
 #define ATA_IDENT_DEVICETYPE   0
 #define ATA_IDENT_CYLINDERS    2

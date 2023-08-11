@@ -1,3 +1,6 @@
+; src/asm/test.s
+; Copyright (C) 2023  Alex Zebra
+
 use32
 org 0900h
 .code:

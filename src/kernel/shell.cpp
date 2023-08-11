@@ -1,3 +1,6 @@
+// src/kernel/shell.cpp
+// Copyright (C) 2023  Alex Zebra
+
 #include "define/color.h"
 #include "define/integer.h"
 #include "lib/graphics/graphics.h"

@@ -1,3 +1,6 @@
+; src/asm/lib/ata.s
+; Copyright (C) 2023  OSDev.org
+
 use32
 ;=============================================================================
 ; ATA read sectors (LBA mode) 
@@ -28,29 +31,29 @@ ata_lba_read:
     mov al, cl           ; Get number of sectors from CL
     out dx, al
 
-    mov edx, 0x01F3       ; Port to send bit 0 - 7 of LBA
+    mov edx, 0x01F3      ; Port to send bit 0 - 7 of LBA
     mov eax, ebx         ; Get LBA from EBX
     out dx, al
 
-    mov edx, 0x01F4       ; Port to send bit 8 - 15 of LBA
+    mov edx, 0x01F4      ; Port to send bit 8 - 15 of LBA
     mov eax, ebx         ; Get LBA from EBX
     shr eax, 8           ; Get bit 8 - 15 in AL
     out dx, al
 
-    mov edx, 0x01F5       ; Port to send bit 16 - 23 of LBA
+    mov edx, 0x01F5      ; Port to send bit 16 - 23 of LBA
     mov eax, ebx         ; Get LBA from EBX
     shr eax, 16          ; Get bit 16 - 23 in AL
     out dx, al
 
-    mov edx, 0x01F7       ; Command port
+    mov edx, 0x01F7      ; Command port
     mov al, 0x20         ; Read with retry.
     out dx, al
 
     cld
     .read_still_going:
         in al, dx
-        test al, 8           ; the sector buffer requires servicing.
-        jz .read_still_going      ; until the sector buffer is ready.
+        test al, 8              ; the sector buffer requires servicing.
+        jz .read_still_going    ; until the sector buffer is ready.
     cli
 
     mov eax, 256         ; to read 256 words = 1 sector
@@ -58,7 +61,7 @@ ata_lba_read:
     mov bl, cl           ; read CL sectors
     mul bx
     mov ecx, eax         ; ECX is counter for INSW
-    mov edx, 0x01F0       ; Data port, in and out
+    mov edx, 0x01F0      ; Data port, in and out
     rep insw             ; in to [EDI]
 
     pop edi
@@ -99,30 +102,30 @@ ata_lba_write:
     mov al, cl           ; Get number of sectors from CL
     out dx, al
  
-    mov edx, 0x01F3       ; Port to send bit 0 - 7 of LBA
+    mov edx, 0x01F3      ; Port to send bit 0 - 7 of LBA
     mov eax, ebx         ; Get LBA from EBX
     out dx, al
  
-    mov edx, 0x01F4       ; Port to send bit 8 - 15 of LBA
+    mov edx, 0x01F4      ; Port to send bit 8 - 15 of LBA
     mov eax, ebx         ; Get LBA from EBX
     shr eax, 8           ; Get bit 8 - 15 in AL
     out dx, al
  
  
-    mov edx, 0x01F5       ; Port to send bit 16 - 23 of LBA
+    mov edx, 0x01F5      ; Port to send bit 16 - 23 of LBA
     mov eax, ebx         ; Get LBA from EBX
     shr eax, 16          ; Get bit 16 - 23 in AL
     out dx, al
  
-    mov edx, 0x01F7       ; Command port
+    mov edx, 0x01F7      ; Command port
     mov al, 0x30         ; Write with retry.
     out dx, al
  
     cld
     .write_still_going:
         in al, dx
-        test al, 8           ; the sector buffer requires servicing.
-        jz .write_still_going      ; until the sector buffer is ready.
+        test al, 8               ; the sector buffer requires servicing.
+        jz .write_still_going    ; until the sector buffer is ready.
     cli
  
     mov eax, 256         ; to read 256 words = 1 sector
@@ -130,7 +133,7 @@ ata_lba_write:
     mov bl, cl           ; write CL sectors
     mul bx
     mov ecx, eax         ; ECX is counter for OUTSW
-    mov edx, 0x01F0       ; Data port, in and out
+    mov edx, 0x01F0      ; Data port, in and out
     mov esi, edi
     rep outsw            ; out
  

@@ -1,3 +1,6 @@
+// include/define/s_rom.h
+// Copyright (C) 2023  Alex Zebra
+
 #include "integer.h"
 
 #ifndef S_ROM

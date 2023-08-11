@@ -1,5 +1,6 @@
-; setup
-; by zebra
+; src/asm/setup.s
+; Copyright (C) 2023  Alex Zebra
+
 use16
 org 0500h
 jmp start
@@ -8,33 +9,31 @@ jmp start
 
 .code:
 start:
-use16
-
-
+    use16
 
 ; Open gate A20
-in al, 92h
-or al, 2
-out 92h, al
+    in al, 92h
+    or al, 2
+    out 92h, al
 
 ; Disable maskable interrupts
-cli
+    cli
 
 ; Disable non-maskable interrupts
-in al, 70h
-or al, 80h
-out 70h, al
+    in al, 70h
+    or al, 80h
+    out 70h, al
 
-lgdt [gdtr]
+    lgdt [gdtr]
 
 ; Switch to protected mode
-mov eax, cr0
-or al, 1
-mov cr0, eax
+    mov eax, cr0
+    or al, 1
+    mov cr0, eax
 
-jmp far dword 0000000000001000b:pm_entry
+    jmp far dword 0000000000001000b:pm_entry
 
-use32
+    use32
 
 ; Protected mode entry point
 pm_entry:
@@ -45,13 +44,13 @@ pm_entry:
     mov gs, ax
     mov ss, ax
 
-    mov eax, 0x3
-    mov ecx, 0x12
-    mov edi, 0x0900
-    call ata_lba_read
-    call 0x0900
+    ; mov eax, 0x3
+    ; mov ecx, 0x10
+    ; mov edi, 0x8000
+    ; call ata_lba_read
+    call 0xA000
 
-    mov edi, 0xB8000
+    mov edi, 0xB8010
     mov esi, message
 
     cld
@@ -60,7 +59,7 @@ pm_entry:
         test al, al
         jz .exit
         stosb
-        mov al, 7
+        mov al, 4
         stosb
         jmp .loop
     cli
@@ -70,16 +69,16 @@ pm_entry:
         jmp $
         hlt
 
-message db 'Error, host is down!', 0
+    message db 'Error, host is down!', 0
 
-align 8
+    align 8
 
-times(512-($-0500h)) db 0
+    times(512-($-0500h)) db 0
 
 .data:
 
 gdt:
-NULL_SEG_DESCRIPTOR db 8 dup(0)
+    NULL_SEG_DESCRIPTOR db 8 dup(0)
 
 CODE_SEG_DESCRIPTOR:
     dw 0xFFFF          

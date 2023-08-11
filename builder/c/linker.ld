@@ -1,7 +1,7 @@
 OUTPUT_FORMAT(binary)
 SECTIONS
 {
-    . = 0x0900;
+    . = 0xA000;
     .text :
     {
         *(.text);
