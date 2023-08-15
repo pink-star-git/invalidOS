@@ -11,7 +11,7 @@ static u_char8 x_pos = 0;
 static u_char8 y_pos = 1;
 static u_char8 width = 80;
 
-void
+static void
 print_char (u_char8 symbol, u_char8 color, u_char8 x, u_char8 y) {
     asm volatile(
         "mov %%cl, %%ah\n\t"
@@ -49,10 +49,9 @@ static void
 clear(){
     for (u_short16 i = 0; i < width*256; i++) {
         asm volatile(
-            "mov %%cl, %%ah\n\t"
-            "stosw\n\t"
+            "stosb\n\t"
             :
-            : "a"(' '), "c"(C_Black),"D"(0xB8000 + i * 2)
+            : "a"(0), "D"(0xB8000 + i)
             :
         );
     }

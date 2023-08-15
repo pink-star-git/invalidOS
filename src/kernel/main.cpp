@@ -25,14 +25,14 @@ main (void)
     s_f_string8 world = "world";
 
     s_f_string8 world_wd = world + s_f_string8("_wd");
-    print(world_wd.data);
 
     clear();
-    print("str", '\n', C_Green);
+    print(world_wd.data);
+
+    print("str", "\n", C_Green);
     print("aboba");
     print(str);
-    // print(dec_2_str((u_char8)t).data, '\n', C_Turquoise);
-    print(float_2_str(t).data, '\n', C_Turquoise);
+    print(float_2_str(t).data, "\n", C_Turquoise);
     print(" ");
 
     // print_char(0x35, 0x2, 8, 8, 80);
