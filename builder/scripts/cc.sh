@@ -6,18 +6,14 @@
 
 printf "\33[37;1m[ * * *  ]\33[0m C compiling \33[1m$1.\33[0m\n"
 
-mkdir log/ce/$2 -p
+mkdir log/c/$2 -p
 
-gcc-12 -x c++ -fpermissive -Os -I ../include -nostdlib -m32 -disable-nls\
+gcc-12 -x c++ -fpermissive -Os -I ../include -nostdlib -m32\
     -march=i486 -fno-pie -ffreestanding -o o/$3/$1.o \
     -Wl,--nmagic,--script=../builder/c/linker.ld \
-    ../src/$2/$1.cpp 2> log/ce/$2/$1.log 1> log/c.log
+    ../src/$2/$1.cpp &> log/c/$2/$1.log
 
-if (grep "error:" log/ce/$2/$1.log)
-then
-    printf "\33[1;31m[ ERROR  ]\33[0m when \33[1m$1\33[0m compilation C.\n"
-    exit
-elif (grep "ошибка:" log/ce/$2/$1.log)
+if (grep "error:" log/c/$2/$1.log || grep "шибка:" log/c/$2/$1.log)
 then
     printf "\33[1;31m[ ERROR  ]\33[0m when \33[1m$1\33[0m compilation C.\n"
     exit
