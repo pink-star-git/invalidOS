@@ -3,6 +3,8 @@
 
 #ifndef INTEGER
 
+#define NULL __null
+
 #define u_char8 unsigned char
 #define u_short16 unsigned short
 #define u_int32 unsigned int

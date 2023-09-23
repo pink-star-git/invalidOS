@@ -11,15 +11,7 @@ struct s_f_string8 {
     u_char8 len = 0;
     u_char8 data[255] = { 0 };
 
-    s_f_string8 () {
-        for (u_char8 i = 0; i < 255; i++)
-            data[i] = 0;
-    }
-
-    // s_f_string8 (u_char8 v) {
-    //     data[0] = v;
-    //     len = 1;
-    // };
+    s_f_string8 () {};
 
     s_f_string8 (u_char8 *v) {
         for (u_short16 i = 0; i < 255; i++){
@@ -52,7 +44,7 @@ struct s_f_string8 {
 
     s_f_string8
     operator+ (u_char8 *v) {
-        s_f_string8 in = s_f_string8(v);
+        s_f_string8 in(v);
         s_f_string8 res = *this;
         for (u_char8 i = 0; i < in.len; i++)
             res.data[res.len+i] = in.data[i];
@@ -61,7 +53,7 @@ struct s_f_string8 {
     };
 
     s_f_string8
-    operator+ (s_f_string8 v) {
+    operator+ (const s_f_string8& v) {
         s_f_string8 res = *this;
         for (u_char8 i = 0; i < v.len; i++)
             res.data[len+i] = v.data[i];
@@ -93,23 +85,10 @@ static u_char8 new_line[4] = "\n\r\0";
 
 
 
-s_f_string8
-str_new_f () {
-    s_f_string8 str;
+static void
+str_clear_f (s_f_string8& str) {
     for (u_char8 i = 0; i < 255; i++)
         str.data[i] = 0;
-    return str;
-};
-
-static void
-str_clear (u_char8 *str) {
-    for (u_char8 i = 0; i < 255; i++)
-        str[i] = 0;
-};
-
-static void
-str_clear_f (s_f_string8 str) {
-    str_clear(str.data);
 };
 
 static u_char8
@@ -191,7 +170,7 @@ static s_f_string8
 dec_2_str (u_int32 num) {
     s_f_string8 conv_str;
     if (num == 0)
-        conv_str.data[0] = 0x30;
+        conv_str.data[0] = '0';
     else {
         u_short16 i = 0;
         for ( ; i < 255; i++) {
@@ -199,7 +178,7 @@ dec_2_str (u_int32 num) {
                 break;
             u_short16 tmp = num % 10;
             num = num / 10;
-            conv_str.data[i] = tmp + 0x30;
+            conv_str.data[i] = tmp + '0';
         }
         str_rev(conv_str.data, conv_str.data + i - 1, i);
         conv_str.data[i] = 0;

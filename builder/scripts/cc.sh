@@ -8,10 +8,15 @@ printf "\33[37;1m[ * * *  ]\33[0m C compiling \33[1m$1.\33[0m\n"
 
 mkdir log/c/$2 -p
 
-gcc-12 -x c++ -fpermissive -Os -I ../include -nostdlib -m32\
-    -march=i486 -fno-pie -ffreestanding -o o/$3/$1.o \
-    -Wl,--nmagic,--script=../builder/c/linker.ld \
+gcc-13 -x c++ -fpermissive -Os -I ../include -nostdlib -m32\
+    -march=i386 -fno-pie -ffreestanding -o o/$3/$1.o \
+    -Wl,--nmagic,--script=../builder/c/linker.ld,--library-path=/usr/lib/gcc/x86_64-linux-gnu/13/32/ \
     ../src/$2/$1.cpp &> log/c/$2/$1.log
+
+# gcc-13 -x c++ -fpermissive -Os -I ../include -nostdlib\
+#     -fno-pie -ffreestanding -o o/$3/$1.o \
+#     -Wl,--nmagic,--script=../builder/c/linker.ld \
+#     ../src/$2/$1.cpp &> log/c/$2/$1.log
 
 if (grep "error:" log/c/$2/$1.log || grep "шибка:" log/c/$2/$1.log)
 then

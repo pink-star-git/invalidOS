@@ -34,7 +34,7 @@ print_point (u_char8 *str, u_char8 color, u_char8 x, u_char8 y) {
 }
 
 static void
-print(u_char8 *str, u_char8 *end_str = "\n", u_char8 color = C_White) {
+print (u_char8 *str, u_char8 *end_str = "\n", u_char8 color = C_White) {
     print_point(str, color, x_pos, y_pos);
     if (end_str == "\n") {
         y_pos++;
@@ -46,7 +46,7 @@ print(u_char8 *str, u_char8 *end_str = "\n", u_char8 color = C_White) {
 }
 
 static void
-clear(){
+clear () {
     for (u_short16 i = 0; i < width*256; i++) {
         asm volatile(
             "stosb\n\t"
@@ -68,7 +68,7 @@ f_print_point (s_f_string8 str, u_char8 color, u_char8 x, u_char8 y) {
 }
 
 static void
-f_print(s_f_string8 str, s_f_string8 end_str = "\n", u_char8 color = C_White) {
+f_print (s_f_string8 str, s_f_string8 end_str = "\n", u_char8 color = C_White) {
     f_print_point(str, color, x_pos, y_pos);
     if (end_str == "\n") {
         y_pos++;

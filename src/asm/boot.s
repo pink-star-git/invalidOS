@@ -38,21 +38,21 @@ boot_disk:
 
 paket_setup:
     dw 16;const paksize
-    dw 2;num sectors
+    dw 2;const sectors
     dw 0500h;offset
     dw 0;segment
     dq 1;start sector
 
 paket_tmp_main_1:
     dw 16;const paksize
-    dw 20;num sectors
+    dw 120;const sectors
     dw 0000h;offset
     dw 0A00h;segment
     dq 3;start sector
 
 ; paket_tmp_main_2:
 ;     dw 16;const paksize
-;     dw 6;num sectors
+;     dw 6;const sectors
 ;     dw 0C00h;offset
 ;     dw 1000h;segment
 ;     dq 9;start sector

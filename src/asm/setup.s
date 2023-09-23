@@ -86,6 +86,9 @@ CODE_SEG_DESCRIPTOR:
     db 10011010b       
     db 11001111b       
     db 0x00            
+    ; dq 0x00            
+
+
 
 DATA_SEG_DESCRIPTOR:
     dw 0xFFFF          
@@ -93,6 +96,7 @@ DATA_SEG_DESCRIPTOR:
     db 10010010b       
     db 11001111b       
     db 0x00            
+    ; dq 0x00            
 
 gdt_size equ $ - gdt
 

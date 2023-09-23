@@ -8,8 +8,36 @@
 #define EPS 1e-10
 
 static s_int32
-abs(s_int32 a) {
-    if (a < 0) return -a;
+max (s_int32 a, s_int32 b) {
+    if (a > b)
+        return a;
+    return b;
+}
+
+static s_int32
+min (s_int32 a, s_int32 b) {
+    if (a < b)
+        return a;
+    return b;
+}
+
+static s_int32
+abs (s_int32 a) {
+    asm volatile (
+        "movl $0, %%ecx \n\t"
+        "movl %%ecx, %%eax \n\t"
+        "cmpl %%ecx, %%ebx \n\t"
+        "sets %%al \n\t"
+        "subl %%eax, %%ecx \n\t"
+        "xorl %%ebx, %%ecx \n\t"
+        "addl %%eax, %%ecx"
+        : "=c"(a)
+        : "b"(a)
+        : "%eax"
+    );
+    // return a * ((a > 0) - (a < 0));
+    // if (a < 0)
+    //     return -a;
     return a;
 }
 

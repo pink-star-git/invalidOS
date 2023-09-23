@@ -4,8 +4,8 @@
 #pragma once
 
 #include "define/integer.h"
-#include "define/ide.h"
 #include "define/color.h"
+#include "define/ide.h"
 
 #include "lib/asm.h"
 #include "lib/graphics/text/text.h"
@@ -261,7 +261,7 @@ ide_initialize () {
 
 static u_char8
 ide_ata_access(u_char8 direction, u_char8 drive, u_int32 lba,
-                u_char8 numsects, u_short16 selector, u_int32 edi) {
+               u_char8 n_of_sects, u_short16 selector, u_int32 edi) {
     u_char8   lba_mode /* 0: CHS,    1:LBA28,   2: LBA48 */,
               dma      /* 0: No DMA, 1: DMA */,
               cmd;
@@ -333,7 +333,7 @@ ide_ata_access(u_char8 direction, u_char8 drive, u_int32 lba,
         ide_write(channel, ATA_REG_LBA4,   lba_io[4]);
         ide_write(channel, ATA_REG_LBA5,   lba_io[5]);
     }
-    ide_write(channel, ATA_REG_SECCOUNT0,   numsects);
+    ide_write(channel, ATA_REG_SECCOUNT0,   n_of_sects);
     ide_write(channel, ATA_REG_LBA0,   lba_io[0]);
     ide_write(channel, ATA_REG_LBA1,   lba_io[1]);
     ide_write(channel, ATA_REG_LBA2,   lba_io[2]);
@@ -360,7 +360,7 @@ ide_ata_access(u_char8 direction, u_char8 drive, u_int32 lba,
     else
         if (direction == 0) {
             // PIO Read.
-            for (i = 0; i < numsects; i++) {
+            for (i = 0; i < n_of_sects; i++) {
                 if (err = ide_polling(channel, 1))
                     return err; // Polling, set error and exit if there is.
                 asm("pushw %es");
@@ -371,7 +371,7 @@ ide_ata_access(u_char8 direction, u_char8 drive, u_int32 lba,
             }
         } else {
             // PIO Write.
-            for (i = 0; i < numsects; i++) {
+            for (i = 0; i < n_of_sects; i++) {
                 ide_polling(channel, 0); // Polling.
                 asm("pushw %ds");
                 asm("mov %%ax, %%ds"::"a"(selector));
@@ -398,14 +398,13 @@ void ide_irq() {
    ide_irq_invoked = 1;
 }
 
-static unsigned char ide_atapi_read(unsigned char drive, unsigned int lba, unsigned char numsects,
-          unsigned short selector, unsigned int edi) {
-
-    unsigned int   channel  = ide_devices[drive].channel;
-    unsigned int   slavebit = ide_devices[drive].drive;
-    unsigned int   bus      = channels[channel].base;
-    unsigned int   words    = 1024; // Sector Size. ATAPI drives have a sector size of 2048 bytes.
-    unsigned char  err      = 0;
+static u_char8
+ide_atapi_read (u_char8 drive, u_int32 lba, u_char8 n_of_sects, u_short16 selector, u_int32 edi) {
+    u_int32   channel  = ide_devices[drive].channel;
+    u_int32   slavebit = ide_devices[drive].drive;
+    u_int32   bus      = channels[channel].base;
+    u_int32   words    = 1024; // Sector Size. ATAPI drives have a sector size of 2048 bytes.
+    u_char8  err      = 0;
 
       // (I): Enable IRQs:
     ide_write(channel, ATA_REG_CONTROL, channels[channel].nIEN = ide_irq_invoked = 0x0);
@@ -420,7 +419,7 @@ static unsigned char ide_atapi_read(unsigned char drive, unsigned int lba, unsig
     atapi_packet[ 6] = 0x0;
     atapi_packet[ 7] = 0x0;
     atapi_packet[ 8] = 0x0;
-    atapi_packet[ 9] = numsects;
+    atapi_packet[ 9] = n_of_sects;
     atapi_packet[10] = 0x0;
     atapi_packet[11] = 0x0;
 
@@ -442,13 +441,14 @@ static unsigned char ide_atapi_read(unsigned char drive, unsigned int lba, unsig
     ide_write(channel, ATA_REG_COMMAND, ATA_CMD_PACKET);      // Send the Command.
 
       // (VIII): Waiting for the driver to finish or return an error code:
-    if (err = ide_polling(channel, 1)) return err;         // Polling and return if error.
+    if (err = ide_polling(channel, 1))
+        return err;         // Polling and return if error.
 
       // (IX): Sending the packet data:
     asm("rep   outsw" : : "c"(6), "d"(bus), "S"(atapi_packet));   // Send Packet Data
 
       // (X): Receiving Data:
-    for (int i = 0; i < numsects; i++) {
+    for (int i = 0; i < n_of_sects; i++) {
         ide_wait_irq();                  // Wait for an IRQ.
         if (err = ide_polling(channel, 1))
             return err;      // Polling and return if error.
@@ -470,45 +470,44 @@ static unsigned char ide_atapi_read(unsigned char drive, unsigned int lba, unsig
 }
 
 static void
-ide_read_sectors(unsigned char drive, unsigned char numsects, unsigned int lba,
-                      unsigned short es, unsigned int edi) {
+ide_read_sectors (u_char8 drive, u_char8 n_of_sects, u_int32 lba, u_short16 es, u_int32 edi) {
 
       // (I): Check if the drive presents:
     if (drive > 3 || ide_devices[drive].reserved == 0) package[0] = 0x1;      // Drive Not Found!
 
       // (II): Check if inputs are valid:
-    else if (((lba + numsects) > ide_devices[drive].size) && (ide_devices[drive].type == IDE_ATA))
+    else if (((lba + n_of_sects) > ide_devices[drive].size) && (ide_devices[drive].type == IDE_ATA))
         package[0] = 0x2;                     // Seeking to invalid position.
 
       // (III): Read in PIO Mode through Polling & IRQs:
     else {
-        unsigned char err;
+        u_char8 err;
         if (ide_devices[drive].type == IDE_ATA)
-            err = ide_ata_access(ATA_READ, drive, lba, numsects, es, edi);
+            err = ide_ata_access(ATA_READ, drive, lba, n_of_sects, es, edi);
         else if (ide_devices[drive].type == IDE_ATAPI)
-            for (int i = 0; i < numsects; i++)
+            for (int i = 0; i < n_of_sects; i++)
                 err = ide_atapi_read(drive, lba + i, 1, es, edi + (i*2048));
         package[0] = ide_print_error(drive, err);
         package[1] = err;
     }
 }
 
-void ide_write_sectors(unsigned char drive, unsigned char numsects, unsigned int lba,
-                       unsigned short es, unsigned int edi) {
+void
+ide_write_sectors (u_char8 drive, u_char8 n_of_sects, u_int32 lba, u_short16 es, u_int32 edi) {
 
       // (I): Check if the drive presents:
     if (drive > 3 || ide_devices[drive].reserved == 0)
         package[0] = 0x1;      // Drive Not Found!
 
       // (II): Check if inputs are valid:
-    else if (((lba + numsects) > ide_devices[drive].size) && (ide_devices[drive].type == IDE_ATA))
+    else if (((lba + n_of_sects) > ide_devices[drive].size) && (ide_devices[drive].type == IDE_ATA))
         package[0] = 0x2;                     // Seeking to invalid position.
 
       // (III): Read in PIO Mode through Polling & IRQs:
     else {
-        unsigned char err;
+        u_char8 err;
         if (ide_devices[drive].type == IDE_ATA)
-            err = ide_ata_access(ATA_WRITE, drive, lba, numsects, es, edi);
+            err = ide_ata_access(ATA_WRITE, drive, lba, n_of_sects, es, edi);
         else if (ide_devices[drive].type == IDE_ATAPI)
             err = 4; // Write-Protected.
         package[0] = ide_print_error(drive, err);
