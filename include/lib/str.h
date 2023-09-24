@@ -5,9 +5,6 @@
 
 #include "../define/integer.h"
 #include "math.h"
-#include <ios>
-#include <limits.h>
-#include <vcruntime.h>
 
 namespace detail {
 
