@@ -22,7 +22,7 @@ struct avl_node {
 };
 
 class avl_tree {
-    avl_node root = avl_node(140, "data");
+    avl_node *root = &avl_node(140, "data");
     u_int32 _tree_size = 1;
 
     u_char8

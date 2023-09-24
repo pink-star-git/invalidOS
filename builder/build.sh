@@ -72,7 +72,7 @@ printf "\33[1;37m[ * * *  ]\33[0m start OS\n"
 if [[ $1 == "-k" ]]
 then
     printf "\33[1;36m[  INFO  ]\33[0m enable KVM\n"
-    qemu-system-x86_64 -enable-kvm -drive file=../os.img,index=0,format=raw
+    qemu-system-x86_64 -enable-kvm -s -drive file=../os.img,index=0,format=raw
 else
-    qemu-system-x86_64 -drive file=../os.img,index=0,format=raw
+    qemu-system-x86_64 -s -drive file=../os.img,index=0,format=raw
 fi

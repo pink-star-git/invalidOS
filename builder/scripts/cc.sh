@@ -10,7 +10,7 @@ mkdir log/c/$2 -p
 
 gcc-13 -x c++ -fpermissive -Os -I ../include -nostdlib -m32\
     -march=i386 -fno-pie -ffreestanding -o o/$3/$1.o \
-    -Wl,--nmagic,--script=../builder/c/linker.ld,--library-path=/usr/lib/gcc/x86_64-linux-gnu/13/32/ \
+    -Wl,--nmagic,--script=../builder/c/linker.ld \
     ../src/$2/$1.cpp &> log/c/$2/$1.log
 
 # gcc-13 -x c++ -fpermissive -Os -I ../include -nostdlib\

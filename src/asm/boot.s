@@ -30,6 +30,12 @@ boot_disk:
     ; mov ah,42h
     ; int 13h
 
+    nop
+    ; jmp $
+    nop
+    nop
+    nop
+
 
     jmp 0000:0500h
 
@@ -38,7 +44,7 @@ boot_disk:
 
 paket_setup:
     dw 16;const paksize
-    dw 2;const sectors
+    dw 3;const sectors
     dw 0500h;offset
     dw 0;segment
     dq 1;start sector
@@ -48,7 +54,7 @@ paket_tmp_main_1:
     dw 120;const sectors
     dw 0000h;offset
     dw 0A00h;segment
-    dq 3;start sector
+    dq 4;start sector
 
 ; paket_tmp_main_2:
 ;     dw 16;const paksize

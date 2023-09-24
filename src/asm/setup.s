@@ -33,6 +33,8 @@ start:
 
     jmp far dword 0000000000001000b:pm_entry
 
+    times(512-($-0500h)) db 0
+
     use32
 
 ; Protected mode entry point
@@ -59,23 +61,28 @@ pm_entry:
         test al, al
         jz .exit
         stosb
-        mov al, 4
+        mov al, [testgdb]
         stosb
         jmp .loop
     cli
 
     cld
     .exit:
+        mov al, 0x2
+        mov [testgdb], al
         jmp $
         hlt
+
+    testgdb db 4
 
     message db 'Error, host is down!', 0
 
     align 8
 
-    times(512-($-0500h)) db 0
+    times(512-($-0700h)) db 0
 
 .data:
+
 
 gdt:
     NULL_SEG_DESCRIPTOR db 8 dup(0)
@@ -104,4 +111,4 @@ gdtr:
     dw gdt_size - 1
     dd gdt 
 
-times(512-($-0700h)) db 0
+times(512-($-0900h)) db 0
