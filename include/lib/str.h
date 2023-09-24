@@ -139,6 +139,7 @@ class string {
     void clear() { len = 0; }
     bool isEmpty() const { return !len; }
     u_char8 size() const { return len; }
+    const char *c_str() const { return (const char *)data; }
 
   private:
     u_char8 len = 0; // should be size_t type
