@@ -23,7 +23,8 @@ namespace sil  // standart invalid library
         return dst - cur;
     }
 
-    template <typename T> inline void swap(T &src, T &dst) {
+    template <typename T>
+    inline void swap(T &src, T &dst) {
         T tmp = src;
         src = dst;
         dst = tmp;

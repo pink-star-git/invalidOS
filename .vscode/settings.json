@@ -1,14 +1,7 @@
 {
     "files.associations": {
         "*.h": "cpp",
-        "*.c": "cpp",
-        "cstring": "cpp",
-        "variant": "cpp",
-        "__string": "cpp",
-        "atomic": "cpp",
-        "charconv": "cpp",
-        "memory": "cpp",
-        "__locale": "cpp"
+        "*.c": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

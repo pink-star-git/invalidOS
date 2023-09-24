@@ -10,8 +10,9 @@
 #include "lib/math.h"
 #include "lib/graphics/text/print.h"
 #include "lib/str.h"
+#include "lib/utils.h"
 // #include "lib/rom/ide.h"
-// #include "lib/ps2_kb.h"
+#include "lib/ps2_kb.h"
 // #include "lib/avl_tree.h"
 
 asm("call main\n\t");
@@ -22,7 +23,13 @@ main (void)
 {
     sil::mem_map_init();
 
+    sil::clear();
     sil::print("test");
+
+    sil::print(utils::dec_2_str(sil::count_memory()) + sil::string("MB"));
+
+    sil::print("");
+    ps2_test();
 
     // static u_char8 *str = "hello";
     // static u_char8 *mem = (u_char8 *)0x18000;
@@ -32,12 +39,12 @@ main (void)
     // static u_char8 *str4 = "60";
     // static u_char8 *str5 = "140";
 
-    sil::string *test = new sil::string("test 1 malloc");
-    sil::string *test2 = new sil::string("test 2 malloc");
+    // sil::string *test = new sil::string("test 1 malloc");
+    // sil::string *test2 = new sil::string("test 2 malloc");
 
 
-    sil::print(*test);
-    sil::print(*test2);
+    // sil::print(*test);
+    // sil::print(*test2);
 
     // avl_tree tree;
     // tree.insert(10, str1);
@@ -61,6 +68,7 @@ main (void)
     // ide_read_sectors(0, 2, 28, 0x10, 0x18000);
 
     // print(hex_2_str(ps2_test()).data);
+    
     // while (true)
     // {
     //     /* code */

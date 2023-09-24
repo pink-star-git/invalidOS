@@ -6,16 +6,50 @@
 #include "define/integer.h"
 #include "lib/graphics/graphic/display.h"
 #include "lib/str.h"
+#include "lib/utils.h"
 
 
 namespace sil { // standart invalid library
 
-    void print(const string& str)
-    {
-        for(int i = 0; i < str.size(); ++i) DISPLAY.set_char(str[i]);
-        // DISPLAY.get_cursor_x(0);
-        // DISPLAY.get_cursor_y(DISPLAY.get_cursor_y());
+    void clear() {
+        for(int i = 0; i < 30*100; ++i) DISPLAY.set_char(0);
+        DISPLAY.set_cursor_x(0);
+        DISPLAY.set_cursor_y(0);
     }
+
+    void print(const string& str, bool new_line = true) {
+        for(int i = 0; i < str.size(); ++i) DISPLAY.set_char(str[i]);
+        if (new_line) {
+            DISPLAY.set_cursor_x(0);
+            DISPLAY.set_cursor_y(DISPLAY.get_cursor_y() + 1);
+        }
+        else
+            DISPLAY.set_cursor_x(DISPLAY.get_cursor_x() + 1);
+    }
+
+    namespace debug {
+        #define DEBUG_CHR 0x00
+        #define DEBUG_STR 0x01
+        #define DEBUG_DEC 0x02
+        #define DEBUG_HEX 0x03
+        #define DEBUG_BIN 0x04
+
+        void print(const string& name, auto data, u_char8 data_type) {
+            print(name+sil::string(":"), false);
+            if (!(data_type ^ DEBUG_CHR))
+                DISPLAY.set_char(data);
+            else if (!(data_type ^ DEBUG_STR))
+                print(sil::string(data));
+            else if (!(data_type ^ DEBUG_DEC))
+                print(utils::dec_2_str(data));
+            else if (!(data_type ^ DEBUG_HEX))
+                print(utils::hex_2_str(data));
+            else if (!(data_type ^ DEBUG_BIN))
+                print(utils::bin_2_str(data));
+        }
+    } // namespace debug
+    
+
 
     // class Print
     // {

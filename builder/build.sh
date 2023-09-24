@@ -74,5 +74,5 @@ then
     printf "\33[1;36m[  INFO  ]\33[0m enable KVM\n"
     qemu-system-x86_64 -enable-kvm -s -m 4G -drive file=../os.img,index=0,format=raw
 else
-    qemu-system-x86_64 -s -drive -m 4G file=../os.img,index=0,format=raw
+    qemu-system-x86_64 -s -drive -m 2G file=../os.img,index=0,format=raw
 fi

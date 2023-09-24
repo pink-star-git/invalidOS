@@ -31,7 +31,7 @@ namespace sil { // standart invalid library
     {
       private:
         u_short16 x_pos = 0;
-        u_short16 y_pos = 1;
+        u_short16 y_pos = 0;
         u_short16 width = 80;
         COLOR color_fg = COLOR::White;
         COLOR color_bg = COLOR::Black;
