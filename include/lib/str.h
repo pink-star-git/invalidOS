@@ -115,8 +115,6 @@ class string {
         return *this;
     }
 
-    size_t size() const { return len; }
-
     u_char8 operator[](size_t index) const { return data[index]; }
     u_char8 &operator[](size_t index) { return data[index]; }
 
@@ -132,14 +130,16 @@ class string {
         return *this;
     }
 
-    void clear() { len = 0; }
-
     string reverse() {
         string s(*this);
         for (size_t i = 0; i < s.len / 2; ++i)
             detail::swap(s.data[i], s.data[s.len - i - 1]);
         return s;
     }
+
+    void clear() { len = 0; }
+    bool isEmpty() const { return !len; }
+    size_t size() const { return len; }
 
   private:
     size_t len = 0; // change if you want
