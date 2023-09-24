@@ -2,14 +2,17 @@
 // Copyright (C) 2023  Alex Zebra
 
 #include "define/integer.h"
-#include "define/color.h"
+// #include "define/color.h"
 
+#include "lib/gcc_fix.h"
+
+#include "lib/mem/mm.h"
 #include "lib/math.h"
-#include "lib/graphics/text/text.h"
+#include "lib/graphics/text/print.h"
 #include "lib/str.h"
-#include "lib/rom/ide.h"
+// #include "lib/rom/ide.h"
 // #include "lib/ps2_kb.h"
-#include "lib/avl_tree.h"
+// #include "lib/avl_tree.h"
 
 asm("call main\n\t");
 
@@ -17,29 +20,38 @@ asm("call main\n\t");
 void
 main (void)
 {
-    static u_char8 *str = "hello";
-    static u_char8 *mem = (u_char8 *)0x18000;
-    static u_char8 *str1 = "10";
-    static u_char8 *str2 = "100";
-    static u_char8 *str3 = "30";
-    static u_char8 *str4 = "60";
-    static u_char8 *str5 = "140";
+    sil::mem_map_init();
+
+    sil::print("test");
+
+    // static u_char8 *str = "hello";
+    // static u_char8 *mem = (u_char8 *)0x18000;
+    // static u_char8 *str1 = "10";
+    // static u_char8 *str2 = "100";
+    // static u_char8 *str3 = "30";
+    // static u_char8 *str4 = "60";
+    // static u_char8 *str5 = "140";
+
+    sil::string *test = new sil::string("test 1 malloc");
+    sil::string *test2 = new sil::string("test 2 malloc");
 
 
-    avl_tree tree;
+    sil::print(*test);
+    sil::print(*test2);
+
+    // avl_tree tree;
     // tree.insert(10, str1);
     // tree.insert(140, str5);
     // tree.insert(100, str2);
     // tree.insert(30, str3);
     // tree.insert(60, str4);
 
-    clear();
+    // sil::clear();
 
-    print(str);
-    u_int32 test140;
-    test140 = tree.find_node(140);
-    u_int32 t140 = 140;
-    print(test140 == NULL ? "NULL" : "1");
+    // u_int32 test140;
+    // test140 = tree.find_node(140);
+    // u_int32 t140 = 140;
+    // print(test140 == NULL ? "NULL" : "1");
     // print((u_char8 *)t140);
 
     // print(tree.find(10));
@@ -49,7 +61,6 @@ main (void)
     // ide_read_sectors(0, 2, 28, 0x10, 0x18000);
 
     // print(hex_2_str(ps2_test()).data);
-    print("test");
     // while (true)
     // {
     //     /* code */

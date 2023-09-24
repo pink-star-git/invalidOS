@@ -15,6 +15,7 @@
 #define s_int32 signed int
 #define s_long64 signed long long int
 
+#define size_t u_int32
 
 #endif
 

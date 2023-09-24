@@ -24,6 +24,7 @@ struct avl_node {
 class avl_tree {
     avl_node *root = &avl_node(140, "data");
     u_int32 _tree_size = 1;
+    avl_node *nodes_list = (size_t)0x8000;
 
     u_char8
     _height (avl_node *p) {
@@ -108,7 +109,8 @@ class avl_tree {
     avl_node *                    // вставка ключа k в дерево с корнем p
     _insert (avl_node *p, u_int32 k, u_char8 *data) {
         if (p == NULL) {
-            avl_node *new_node = &avl_node(k, data);
+            // avl_node *new_node = &avl_node(k, data);
+            nodes_list[0] = avl_node(k, data);
             return new_node;
         }
         if (k<p->key)

@@ -1,9 +1,10 @@
 // include/lib/str.h
-// Copyright (C) 2023  Alex Zebra
+// Copyright (C) 2023  Vi
 
 #pragma once
 
 #include "../define/integer.h"
+#include "mem/mem.h"
 #include "math.h"
 
 namespace detail {
@@ -51,28 +52,6 @@ inline u_char8 strcmp(const char *src, const char *dst) { // should be \0 ended
     return 0;
 }
 
-inline u_char8 memcpy(const char *src, char *dst, u_char8 size) {
-    auto cur = src;
-    while (src - cur <= size) { // TODO: test `size`
-        *dst++ = *src++;
-    }
-    return src - cur;
-}
-
-inline u_char8 memset(char *dst, u_char8 size, char symbol = 0) {
-    auto cur = dst;
-    while (dst - cur <= size) { // TODO: test `size`
-        *dst++ = symbol;
-    }
-    return dst - cur;
-}
-
-template <typename T> inline void swap(T &src, T &dst) {
-    T tmp = src;
-    src = dst;
-    dst = tmp;
-}
-
 } // namespace detail
 
 namespace sil { // standart invalid library
@@ -99,7 +78,7 @@ class string {
     }
 
     string &operator=(string &&str) {
-        detail::swap(*this, str);
+        swap(*this, str);
         str.clear();
         return *this;
     }
@@ -132,7 +111,7 @@ class string {
     string reverse() const {
         string temp(*this);
         for (u_char8 i = 0; i < temp.size() / 2; ++i)
-            detail::swap(temp[i], temp[temp.size() - i - 1]);
+            swap(temp[i], temp[temp.size() - i - 1]);
         return temp;
     }
 
