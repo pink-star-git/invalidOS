@@ -184,34 +184,28 @@ void MemoryTree::free(size_t key) {
 
 size_t MemoryTree::alloc(size_t size) {
     size_t check_size = 1; // for assertion check. remove later
+    size_t current = 0;
 
     // LNR algrorithm to search node (prev<next)
-    auto search = [](Node* root) {
-        size_t current = 0;
+    auto next = [&] {
+        Node* result = nullptr;
+        size_t counter = 0;
 
-        auto next = [=]() mutable {
-            Node* result = nullptr;
-            size_t counter = 0;
-
-            auto recursive = [&](const auto& f, Node* node) {
-                if (!node)
-                    return;
-                f(f, node->left);
-                if (counter++ == current)
-                    result = node;
-                if (result)
-                    return;
-                f(f, node->right);
-            };
-            recursive(recursive, root);
-            current++;
-            return result;
+        auto recursive = [&](const auto& f, Node* node) {
+            if (!node)
+                return;
+            f(f, node->left);
+            if (counter++ == current)
+                result = node;
+            if (result)
+                return;
+            f(f, node->right);
         };
-        return next;
+        recursive(recursive, m_root);
+        current++;
+        return result;
     };
 
-
-    auto next = search(m_root);
     Node* first = next();
     while (Node* second = next()) {
         assert(first->key + first->size <= second->key);
