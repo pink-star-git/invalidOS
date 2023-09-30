@@ -197,11 +197,10 @@ size_t MemoryTree::alloc(size_t size) {
                 if (!node)
                     return;
                 f(f, node->left);
+                if (counter++ == current)
+                    result = node;
                 if (result)
                     return;
-                if (counter == current)
-                    result = node;
-                counter++;
                 f(f, node->right);
             };
             recursive(recursive, root);
