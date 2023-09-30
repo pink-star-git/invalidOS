@@ -46,7 +46,6 @@ public:
 
 private:
     void assign(size_t key, size_t size);
-
     int setBalance(Node* node);
     int getHeight(Node* node) const;
     void rebalance(Node* node);
@@ -57,38 +56,6 @@ private:
     void rotateRLR(Node* patent, Node* node, Node* child);
     void removeNode(Node* node);
     Node* findNode(size_t key);
-
-    class LNR {
-        size_t m_counter = 0;
-        size_t m_current = 0;
-        Node* m_root = nullptr;
-        Node* m_result = nullptr;
-
-        Node* recursiveSearch(Node* node) {
-            if (node->left)
-                m_result = recursiveSearch(node->left);
-            if (m_result)
-                return m_result;
-            if (m_counter == m_current)
-                return node;
-            m_counter++;
-            if (node->right)
-                m_result = recursiveSearch(node->right);
-            return m_result;
-        }
-
-    public:
-        LNR(Node* root) : m_root(root) {
-        }
-        Node* next() {
-            m_result = nullptr;
-            m_counter = 0;
-            auto result = recursiveSearch(m_root);
-            m_current++;
-
-            return result;
-        }
-    };
 
     NodePool m_pool;
     Node* m_root = nullptr;
