@@ -8,8 +8,10 @@
 #include "define/ide.h"
 
 #include "lib/asm.h"
-#include "lib/graphics/text/text.h"
+#include "lib/graphics/text/print.h"
 #include "lib/str.h"
+
+using namespace asm_;
 
 static IDEChannelRegisters channels[2];
 static ide_device ide_devices[4];
@@ -112,24 +114,23 @@ ide_print_error (u_int32 drive, u_char8 err) {
     if (err == 0)
         return err;
 
-    print("IDE: Error:", " ", C_Red);
-    if        (err == 1)      {print("- Device Fault", "\n", C_Red);              err = 19;}
+    sil::printc("IDE: Error:", COLOR::Red, " ");
+    if        (err == 1)      {sil::printc("- Device Fault", COLOR::Red, "\n");              err = 19;}
     else   if (err == 2) {
         u_char8 st = ide_read(ide_devices[drive].channel, ATA_REG_ERROR);
-        if (st & ATA_ER_AMNF)   {print("- No Address Mark Found", "\n", C_Red);     err = 7;}
-        if (st & ATA_ER_TK0NF)  {print("- No Media or Media Error", "\n", C_Red);   err = 3;}
-        if (st & ATA_ER_ABRT)   {print("- Command Aborted", "\n", C_Red);           err = 20;}
-        if (st & ATA_ER_MCR)    {print("- No Media or Media Error", "\n", C_Red);   err = 3;}
-        if (st & ATA_ER_IDNF)   {print("- ID mark not Found", "\n", C_Red);         err = 21;}
-        if (st & ATA_ER_MC)     {print("- No Media or Media Error", "\n", C_Red);   err = 3;}
-        if (st & ATA_ER_UNC)    {print("- Uncorrectable Data Error", "\n", C_Red);  err = 22;}
-        if (st & ATA_ER_BBK)    {print("- Bad Sectors", "\n", C_Red);               err = 13;}
-    } else if (err == 3)      {print("- Reads Nothing", "\n", C_Red);             err = 23;}
-    else   if (err == 4)      {print("- Write Protected", "\n", C_Red);           err = 8;}
-    // printk("- [%s %s] %s\n",
-    print((const u_char8 *[]){"Primary", "Secondary"}[ide_devices[drive].channel], " ", C_Red); // Use the channel as an index into the array
-    print((const u_char8 *[]){"Master", "Slave"}[ide_devices[drive].drive], "\n", C_Red); // Same as above, using the drive
-    print(ide_devices[drive].model, "\n", C_Red);
+        if (st & ATA_ER_AMNF)   {sil::printc("- No Address Mark Found", COLOR::Red, "\n");     err = 7;}
+        if (st & ATA_ER_TK0NF)  {sil::printc("- No Media or Media Error", COLOR::Red, "\n");   err = 3;}
+        if (st & ATA_ER_ABRT)   {sil::printc("- Command Aborted", COLOR::Red, "\n");           err = 20;}
+        if (st & ATA_ER_MCR)    {sil::printc("- No Media or Media Error", COLOR::Red, "\n");   err = 3;}
+        if (st & ATA_ER_IDNF)   {sil::printc("- ID mark not Found", COLOR::Red, "\n");         err = 21;}
+        if (st & ATA_ER_MC)     {sil::printc("- No Media or Media Error", COLOR::Red, "\n");   err = 3;}
+        if (st & ATA_ER_UNC)    {sil::printc("- Uncorrectable Data Error", COLOR::Red, "\n");  err = 22;}
+        if (st & ATA_ER_BBK)    {sil::printc("- Bad Sectors", COLOR::Red, "\n");               err = 13;}
+    } else if (err == 3)      {sil::printc("- Reads Nothing", COLOR::Red, "\n");             err = 23;}
+    else   if (err == 4)      {sil::printc("- Write Protected", COLOR::Red, "\n");           err = 8;}
+    sil::printc((const u_char8 *[]){"Primary", "Secondary"}[ide_devices[drive].channel], COLOR::Red, " "); // Use the channel as an index into the array
+    sil::printc((const u_char8 *[]){"Master", "Slave"}[ide_devices[drive].drive], COLOR::Red, "\n"); // Same as above, using the drive
+    sil::printc(ide_devices[drive].model, COLOR::Red, "\n");
 
     return err;
 }
@@ -161,11 +162,11 @@ ide_initialize () {
 
             // (I) Select Drive:
             ide_write(i, ATA_REG_HDDEVSEL, 0xA0 | (j << 4)); // Select Drive.
-            sleep(1); // Wait 1ms for drive select to work.
+            time::sleep(100); // Wait 1ms for drive select to work.
 
             // (II) Send ATA Identify Command:
             ide_write(i, ATA_REG_COMMAND, ATA_CMD_IDENTIFY);
-            sleep(1); // This function should be implemented in your OS. which waits for 1 ms.
+            time::sleep(100); // This function should be implemented in your OS. which waits for 1 ms.
                      // it is based on System Timer Device Driver.
 
             // (III) Polling:
@@ -199,7 +200,7 @@ ide_initialize () {
                     continue; // Unknown Type (may not be a device).
 
                 ide_write(i, ATA_REG_COMMAND, ATA_CMD_IDENTIFY_PACKET);
-                sleep(1);
+                time::sleep(100);
             }
 
             // (V) Read Identification Space of the Device:
@@ -233,29 +234,29 @@ ide_initialize () {
         }
 
     // 4 - Print Summary:
-    print("IDE:");
+    sil::print("IDE:");
     for (i = 0; i < 4; i++) {
-        print("   ", " ");
-        print(dec_2_str(i).data, " ");
-        print("Dev:", " ");
+        sil::print("\t", "");
+        sil::print("Dev", " ");
+        sil::print(utils::dec_2_str(i), ": ");
         if (ide_devices[i].reserved == 1) {
             u_int32 size = ide_devices[i].size / 2;
-            print("Found");
-            print("        Type:", " ");
-            print((const u_char8 *[]){"ATA", "ATAPI"}[ide_devices[i].type]);
-            print("        Size:", " ");
-            print(dec_2_str(size).data, ".");
-            print(dec_2_str(ide_devices[i].size % 2 * 5).data, " ");
-            print("KB;", " ");
-            print(dec_2_str(size / 1024).data, ".");
-            print(dec_2_str(size / 10 % 100 / 11 + size / 10 % 10 / 5 ).data, " ");
-            print("MB");
-            print("        Model:", " ");
-            print(ide_devices[i].model);
+            sil::print("Found");
+            sil::print("        Type:", " ");
+            sil::print((const u_char8 *[]){"ATA", "ATAPI"}[ide_devices[i].type]);
+            sil::print("        Size:", " ");
+            sil::print(utils::dec_2_str(size), ".");
+            sil::print(utils::dec_2_str(ide_devices[i].size % 2 * 5), " ");
+            sil::print("KB;", " ");
+            sil::print(utils::dec_2_str(size / 1024), ".");
+            sil::print(utils::dec_2_str(size / 10 % 100 / 11 + size / 10 % 10 / 5 ), " ");
+            sil::print("MB");
+            sil::print("        Model:", " ");
+            sil::print(ide_devices[i].model);
         } else {
-            print("None");
+            sil::print("None");
         }
-        print(" ");
+        sil::print(" ");
     }
 }
 

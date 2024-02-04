@@ -24,13 +24,16 @@ min (s_int32 a, s_int32 b) {
 static s_int32
 abs (s_int32 a) {
     asm volatile (
-        "movl $0, %%ecx \n\t"
-        "movl %%ecx, %%eax \n\t"
-        "cmpl %%ecx, %%ebx \n\t"
-        "sets %%al \n\t"
-        "subl %%eax, %%ecx \n\t"
-        "xorl %%ebx, %%ecx \n\t"
-        "addl %%eax, %%ecx"
+        // "movl $0, %%ecx \n\t"
+        // "movl %%ecx, %%eax \n\t"
+        // "cmpl %%ecx, %%ebx \n\t"
+        // "sets %%al \n\t"
+        // "subl %%eax, %%ecx \n\t"
+        // "xorl %%ebx, %%ecx \n\t"
+        // "addl %%eax, %%ecx"
+        "mov    %%eax, %%edi \n\t"
+        "neg    %%eax      \n\t"
+        "cmovs  %%eax, %%edi \n\t"
         : "=c"(a)
         : "b"(a)
         : "%eax"

@@ -1,9 +1,17 @@
 #!/bin/bash
-
 # builder/build.sh
 # Copyright (C) 2023  Alex Zebra
 
-# start
+
+source $(dirname "$0")/scripts/ext.sh
+
+
+#    ,-------------------,
+#    | MAIN BUILDER FILE |
+#    '-------------------'
+
+
+#    START
 printf "\33[1m
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃ ╭─────────────┬─────────────────╮ ┃╗
@@ -29,50 +37,54 @@ printf "\33[1m
 "
 
 cd ..
-mkdir build -p
+mkdir -p build
 cd build
-
-# pre compilation
-printf "\33[1;36m[  INFO  ]\33[0m pre compilation\n"
-
-mkdir bin -p
-mkdir o -p
-mkdir log -p
-touch log/fasm.log 2> /dev/null
-touch log/c.log 2> /dev/null
-printf "\33[1;32m[  DONE  ]\33[0m pre compilation done\n\n"
+remove_status_file
 
 
-# C compilation
-printf "\33[1;36m[  INFO  ]\33[0m c compilation\n"
+#    PRE BUILD
+BLOCK_NAME="Pre-build"
+log_block_start
+    mkdir -p bin
+    mkdir -p out
+    mkdir -p log
+log_block_done
 
-# ../builder/script/ccs.sh main kernel
-../builder/scripts/cc.sh main kernel
-printf "\33[1;32m[  DONE  ]\33[0m c compilation done\n\n"
 
 
-# post compilation
-printf "\33[1;36m[  INFO  ]\33[0m post compilation\n"
+#    C++ COMPILATION
+BLOCK_NAME="C++"
+log_block_start
+    cpp_compilation main kernel
+log_block_end
 
-../builder/scripts/fasmc.sh boot asm
-../builder/scripts/fasmc.sh setup asm
-# ../builder/scripts/fasmc.sh test asm
-../builder/scripts/fasmc.sh system_interrupt asm
-../builder/scripts/fasmc.sh main ../builder/s/kernel
-#../builder/script/fasmc.sh shell ../builder/s/kernel
-../builder/scripts/fasmc.sh os ../builder/s/os ..
-printf "\33[1;32m[  DONE  ]\33[0m post compilation done\n\n"
 
-# copy img
-mv -f os.bin ../os.img
+
+#    FASM COMPILATION
+BLOCK_NAME="Fasm"
+log_block_start
+    fasm_compilation boot asm
+    fasm_compilation setup asm
+log_block_done
+
+
+
+#    POST BUILD
+BLOCK_NAME="Post-build"
+log_block_start
+    fasm ../builder/s/os/os.s os.bin > /dev/null
+    mv -f os.bin ../os.img
+log_block_done
+
+
 
 # start os
-printf "\33[1;37m[ * * *  ]\33[0m start OS\n"
+printf "$LOAD_STAT start OS\n"
 
 if [[ $1 == "-k" ]]
 then
-    printf "\33[1;36m[  INFO  ]\33[0m enable KVM\n"
-    qemu-system-x86_64 -enable-kvm -s -m 3G -drive file=../os.img,index=0,format=raw
+    printf "$INFO_STAT enable KVM\n"
+    qemu-system-x86_64 -enable-kvm -s -m 6G -drive file=../os.img,index=0,format=raw
 else
-    qemu-system-x86_64 -s -m 3G -drive file=../os.img,index=0,format=raw
+    qemu-system-x86_64 -s -m 2G -drive file=../os.img,index=0,format=raw
 fi

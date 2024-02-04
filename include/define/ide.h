@@ -1,6 +1,8 @@
 // include/define/ide.h
 // Copyright (C) 2023  OSDev.org
 
+#pragma once
+
 #include "ata.h"
 #include "integer.h"
 

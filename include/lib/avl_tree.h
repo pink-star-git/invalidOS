@@ -1,6 +1,8 @@
 // include/lib/avl_tree.h
 // Copyright (C) 2023  Alex Zebra
 
+//! THIS FILE DON`T USE
+
 // AVL Tree Implementation in C++
 
 #include "define/integer.h"

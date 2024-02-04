@@ -1,6 +1,8 @@
 // include/define/ata.h
 // Copyright (C) 2023  OSDev.org
 
+#pragma once
+
 #include "integer.h"
 #ifndef ATA
 

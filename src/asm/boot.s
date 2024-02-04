@@ -21,7 +21,7 @@ boot_disk:
     mov si,paket_setup
     mov ah,42h
     int 13h
-
+move:
     mov si,paket_tmp_main_1
     mov ah,42h
     int 13h

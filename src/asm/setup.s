@@ -52,8 +52,8 @@ pm_entry:
     ; call ata_lba_read
     call 0xA000
 
-    mov edi, 0xB8010
-    mov esi, message
+    mov edi, 0xB8180
+    mov esi, msg
 
     cld
     .loop:
@@ -61,7 +61,7 @@ pm_entry:
         test al, al
         jz .exit
         stosb
-        mov al, [testgdb]
+        mov al, [msg_color]
         stosb
         jmp .loop
     cli
@@ -69,13 +69,13 @@ pm_entry:
     cld
     .exit:
         mov al, 0x2
-        mov [testgdb], al
+        mov [msg_color], al
         jmp $
         hlt
 
-    testgdb db 4
+    msg_color db 6
 
-    message db 'Error, host is down!', 0
+    msg db 'Host is down!', 0
 
     align 8
 

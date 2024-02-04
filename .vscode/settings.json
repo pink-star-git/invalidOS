@@ -1,7 +1,23 @@
 {
     "files.associations": {
+        "*.html": "jinja-html",
         "*.h": "cpp",
-        "*.c": "cpp"
+        "*.c": "cpp",
+        "*.ld": "c",
+        "string": "cpp",
+        "format": "cpp",
+        "iosfwd": "cpp",
+        "__config": "cpp",
+        "__nullptr": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "system_error": "cpp",
+        "__split_buffer": "cpp",
+        "atomic": "cpp",
+        "ios": "cpp",
+        "set": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

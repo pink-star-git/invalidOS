@@ -23,10 +23,10 @@ namespace utils {
                 else
                     data[i] = tmp - 10 + 0x41;
             }
-            str::rev(data);
+            // str::rev(data);
             // conv_str.data[i] = 0;
         }
-        sil::string conv_str = sil::string(data);
+        sil::string conv_str = sil::string(data).reverse();
         return conv_str;
     };
 
@@ -44,10 +44,10 @@ namespace utils {
                 num = num / 10;
                 data[i] = tmp + '0';
             }
-            str::rev(data);
+            // str::rev(data);
             // conv_str.data[i] = 0;
         }
-        sil::string conv_str = sil::string(data);
+        sil::string conv_str = sil::string(data).reverse();
         return conv_str;
     };
 
@@ -65,10 +65,10 @@ namespace utils {
                 num = num / 2;
                 data[i] = tmp + 0x30;
             }
-            str::rev(data);
+            // str::rev(data);
             data[i] = 0;
         }
-        sil::string conv_str = sil::string(data);
+        sil::string conv_str = sil::string(data).reverse();
         return conv_str;
     };
 } // namespace utils

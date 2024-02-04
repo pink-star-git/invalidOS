@@ -1,18 +1,68 @@
 #!/bin/bash
-
 # builder/scripts/fasmc.sh
 # Copyright (C) 2023  Alex Zebra
 
-printf "\33[37;1m[ * * *  ]\33[0m compiling \33[1m$1.\33[0m\n"
+
+source $(dirname "$0")/ext.sh
 
 
-mkdir log/fasm/$3 -p
+#    ,------------------,
+#    | C++ BUILDER FILE |
+#    '------------------'
 
-fasm ../src/$2/$1.s bin/$3/$1.bin &> log/fasm/$3/$1.log
+BLOCK_NAME=$1
+file=$2
+dir=$3
 
-if (grep "error" log/fasm/$3/$1.log)
+name="\33[1m$file\33[0m"
+
+
+
+#    START
+
+printf "$LOAD_STAT $BLOCK_NAME: $name - compilation started."
+
+
+
+#    PATH
+
+# build
+src_dir="../src/$dir"
+src_file="$src_dir/$file.s"
+
+out_dir="bin/out/$dir"
+out_suf=".bin"
+out_file="$out_dir/$file.o"
+mkdir -p $out_dir
+
+# log
+log_dir="../build/log/fasm/$dir"
+log_e_dir="../build/log/error/fasm/$dir"
+log_suf=".log"
+log_file="$log_dir/$file$log_suf"
+log_e_file="$log_e_dir/$file$log_suf"
+
+mkdir -p $log_dir
+mkdir -p $log_e_dir
+
+
+
+#    BUILD
+
+fasm $src_file $out_file &> $log_file
+
+
+
+#    LOGGING BUILD
+
+printf "$CLEAR"
+
+if (grep "error" "$log_file" > /dev/null)
 then
-    printf "\33[1;31m[ ERROR  ]\33[0m when \33[1m$1\33[0m compilation.\n"
+    status_fail
+    printf "$FAIL_STAT $BLOCK_NAME: $name - compilation error:\n"
+    printf "$INFO_STAT Log: $log_file\n"
 else
-    printf "\33[1;32m[   OK   ]\33[0;1m $1\33[0m compilation done.\33[0m\n"
+    status_complete
+    printf "$DONE_STAT $BLOCK_NAME: $name - compilation done.\33[0m\n"
 fi
